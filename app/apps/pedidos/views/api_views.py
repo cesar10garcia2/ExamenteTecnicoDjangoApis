@@ -31,7 +31,7 @@ class ApiProductoDetail(APIView):
     """
     def get_object(self, pk):
         try:
-            return Producto.objects.filter(estado=1).get(pk=pk)
+            return Producto.objects.get(pk=pk)
         except Producto.DoesNotExist:
             raise Http404
 
