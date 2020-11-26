@@ -21,9 +21,9 @@ class Producto(models.Model):
         return self.nombre
 
 class Cliente(models.Model):
-    nombre = models.CharField(max_length=100, unique=True, verbose_name="Categoria")
-    celular = models.CharField(max_length=12, unique=True, verbose_name="Celular")
-    direccion = models.CharField(max_length=100, unique=True, verbose_name="Direccion")
+    nombre = models.CharField(max_length=100, verbose_name="Categoria")
+    celular = models.CharField(max_length=12, verbose_name="Celular")
+    direccion = models.CharField(max_length=100, verbose_name="Direccion")
 
     def __str__(self):
         return self.nombre

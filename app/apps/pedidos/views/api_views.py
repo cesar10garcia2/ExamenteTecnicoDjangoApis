@@ -1,9 +1,12 @@
 from django.http import Http404
 from rest_framework import generics
-from ..serializers import ProductoSerializer,CatagoriaProductosSerializer
+from ..serializers import ProductoSerializer,CatagoriaProductosSerializer, ClienteSerializer,PedidosSerializer,DetallePedidosSerializer, GuardarPedidosSerializer
 from ..models import Producto, Categoria
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework import status
+
+from .pedido_repository import guardar_pedido, guardar_detalle_pedido, guardar_cliente
 
 
 class ApiProductoList(generics.ListAPIView):
@@ -53,3 +56,19 @@ class ApiCatagoriaProductosList(generics.ListAPIView):
         object_list = Categoria.objects.filter(
             nombre__icontains=nombre).order_by('nombre')
         return object_list
+
+
+
+
+class GuardarPedido(APIView):
+    def post(self, request, format=None):
+        serializer = GuardarPedidosSerializer(data=request.data)
+        if serializer.is_valid():
+
+            cliente = guardar_cliente(serializer.data["cliente"])
+            pedido = guardar_pedido(cliente)
+            guardar_detalle_pedido(pedido, serializer.data["detalle"])
+
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
